@@ -2,18 +2,31 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+namespace SourceGenerators;
+
 [Generator]
 public class MethodOverloadGenerator : IIncrementalGenerator
 {
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
-		// Find all method declarations in the compilation
+		// Find all method declarations with the [GenerateOverloads] attribute
 		var methodDeclarations = context.SyntaxProvider
 			.CreateSyntaxProvider(
-				predicate: (node, _) => node is MethodDeclarationSyntax,
-				transform: (ctx, _) => (MethodDeclarationSyntax)ctx.Node
-			)
-			.Where(method => method.ParameterList.Parameters.Any(p => p.Default != null)); // Only methods with optional params
+				predicate: static (node, _) => node is MethodDeclarationSyntax,
+				transform: static (ctx, _) =>
+				{
+					var method = (MethodDeclarationSyntax)ctx.Node;
+					// Look for [GenerateOverloads] on the method
+					var hasAttribute = method.AttributeLists
+						.SelectMany(a => a.Attributes)
+						.Any(attr =>
+							attr.Name.ToString() == "GenerateOverloads" ||
+							attr.Name.ToString() == "GenerateOverloadsAttribute");
+
+					return hasAttribute ? method : null;
+				})
+			.Where(m => m is not null)
+			.Select((m, _) => m!);
 
 		context.RegisterSourceOutput(
 			methodDeclarations,
