@@ -1,11 +1,10 @@
+using NUnit.Framework;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-using Xunit;
-using Verifier = Microsoft.CodeAnalysis.Testing.Verifiers.XUnitVerifier;
+using Verifier = Microsoft.CodeAnalysis.Testing.Verifiers.NUnitVerifier;
 
-#pragma warning disable CS0618 // XUnitVerifier is obsolete in Roslyn SDK, but required for source generator tests
 public class MethodOverloadGeneratorEdgeCaseTests
 {
     const string AttributeSource = @"using System;
@@ -18,7 +17,7 @@ namespace SourceGenerators
 }
 ";
 
-    [Fact]
+    [Test]
     public async Task No_Optional_Parameters_Generates_No_Overloads()
     {
         var input = @"
@@ -43,7 +42,7 @@ public partial class MyClass
         await test.RunAsync();
     }
 
-    [Fact]
+    [Test]
     public async Task Handles_Methods_With_Reference_And_Value_Types()
     {
         var input = @"
@@ -86,4 +85,3 @@ public partial class MyClass
         await test.RunAsync();
     }
 }
-#pragma warning restore CS0618

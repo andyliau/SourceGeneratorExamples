@@ -1,10 +1,10 @@
 #pragma warning disable CS0618 // XUnitVerifier is obsolete in Roslyn SDK, but required for source generator tests
+using NUnit.Framework;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-using Xunit;
-using Verifier = Microsoft.CodeAnalysis.Testing.Verifiers.XUnitVerifier;
+using Verifier = Microsoft.CodeAnalysis.Testing.Verifiers.NUnitVerifier;
 
 public class MethodOverloadGeneratorTests
 {
@@ -18,7 +18,7 @@ namespace SourceGenerators
 }
 ";
 
-    [Fact]
+    [Test]
     public async Task Generates_Overloads_For_Optional_Parameters()
     {
         var input = @"
