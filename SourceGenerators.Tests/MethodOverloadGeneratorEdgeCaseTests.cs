@@ -77,7 +77,50 @@ public partial class MyClass
                 {
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_1.g.cs", expected0),
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_2.g.cs", expected1),
-                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_3.g.cs", expected2),
+                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_3.g.cs", expected2),
+                }
+            }
+        };
+
+        await test.RunAsync();
+    }
+
+    [Test]
+    public async Task Handles_Method_With_Four_Parameters_And_Same_Type()
+    {
+        var input = @"
+using SourceGenerators;
+
+public partial class MyClass
+{
+    [GenerateOverloads]
+    public void Quux(int a, int b = 1, int c = 2, int d = 3) { }
+}
+";
+
+        var expected1 = @"partial class MyClass {
+    public void Quux(int a) => Quux(a, 1, 2, 3);
+}
+";
+        var expected2 = @"partial class MyClass {
+    public void Quux(int a, int b) => Quux(a, b, 2, 3);
+}
+";
+        var expected3 = @"partial class MyClass {
+    public void Quux(int a, int b, int c) => Quux(a, b, c, 3);
+}
+";
+
+        var test = new CSharpSourceGeneratorTest<SourceGenerators.MethodOverloadGenerator, Verifier>
+        {
+            TestState =
+            {
+                Sources = { AttributeSource, input },
+                GeneratedSources =
+                {
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quux_overload_1.g.cs", expected1),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quux_overload_2.g.cs", expected2),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quux_overload_3.g.cs", expected3),
                 }
             }
         };
