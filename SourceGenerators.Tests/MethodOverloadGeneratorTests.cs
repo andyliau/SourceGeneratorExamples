@@ -21,15 +21,15 @@ namespace SourceGenerators
     [Test]
     public async Task Generates_Overloads_For_Optional_Parameters()
     {
-        var input = @"
+        var input = """
 using SourceGenerators;
 
 public partial class MyClass
 {
     [GenerateOverloads]
-    public void Foo(int x, string y = ""x"", bool z = false) { }
+    public void Foo(int x, string y = "x", bool z = false) { }
 }
-";
+""";
 
         var expected = """
 partial class MyClass {

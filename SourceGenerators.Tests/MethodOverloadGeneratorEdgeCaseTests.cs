@@ -7,7 +7,7 @@ using Verifier = Microsoft.CodeAnalysis.Testing.Verifiers.NUnitVerifier;
 
 public class MethodOverloadGeneratorEdgeCaseTests
 {
-	const string AttributeSource = @"using System;
+	const string AttributeSource = """using System;
 namespace SourceGenerators
 {
     [AttributeUsage(AttributeTargets.Method)]
@@ -15,12 +15,12 @@ namespace SourceGenerators
     {
     }
 }
-";
+""";
 
 	[Test]
 	public async Task No_Optional_Parameters_Generates_No_Overloads()
 	{
-		var input = @"
+		var input = """
 using SourceGenerators;
 
 public partial class MyClass
@@ -28,7 +28,7 @@ public partial class MyClass
     [GenerateOverloads]
     public void Bar(int x, int y) { }
 }
-";
+""";
 
 		var test = new CSharpSourceGeneratorTest<SourceGenerators.MethodOverloadGenerator, Verifier>
 		{
@@ -67,7 +67,7 @@ public partial class MyClass
 	[Test]
 	public async Task Handles_Methods_With_Reference_And_Value_Types()
 	{
-		var input = @"
+		var input = """
 using SourceGenerators;
 
 public partial class MyClass
@@ -75,7 +75,7 @@ public partial class MyClass
     [GenerateOverloads]
     public void Baz(string? s = null, int n = 42) { }
 }
-";
+""";
 
 		var expected = """
 partial class MyClass {
@@ -126,7 +126,7 @@ partial class MyClass {
 	[Test]
 	public async Task Handles_Method_With_Four_Parameters_And_Same_Type()
 	{
-		var input = @"
+		var input = """
 using SourceGenerators;
 
 public partial class MyClass
@@ -134,7 +134,7 @@ public partial class MyClass
     [GenerateOverloads]
     public void Quux(int a, int b = 1, int c = 2, int d = 3) { }
 }
-";
+""";
 
 		var expected = """
 partial class MyClass {
@@ -185,15 +185,15 @@ partial class MyClass {
 	[Test]
 	public async Task Handles_Method_With_Mixed_Optional_Types_Combinations()
 	{
-		var input = @"
+		var input = """
 using SourceGenerators;
 
 public partial class MyClass
 {
     [GenerateOverloads]
-    public void Quack(string a, string b = ""1"", int c = 2, int d = 3) { }
+    public void Quack(string a, string b = "1", int c = 2, int d = 3) { }
 }
-";
+""";
 
 		var expected = """
 partial class MyClass {
@@ -246,7 +246,7 @@ partial class MyClass {
 	[Test]
 	public async Task Handles_Method_With_Complex_Optional_Parameters()
 	{
-		var input = @"
+		var input = """
 using SourceGenerators;
 
 public partial class MyClass
@@ -254,7 +254,7 @@ public partial class MyClass
     [GenerateOverloads]
     public void Complex(string req, int a = 1, string? b = null, double c = 2.5, object? d = null, bool e = true) { }
 }
-";
+""";
 
 		var expected = """
 partial class MyClass {
