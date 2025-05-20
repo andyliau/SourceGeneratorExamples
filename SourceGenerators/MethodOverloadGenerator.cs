@@ -73,23 +73,22 @@ public class MethodOverloadGenerator : IIncrementalGenerator
 						validCombos.Add(combo);
 				}
 
-				int overloadIndex = 1;
+				var allOverloadsSb = new StringBuilder();
+				if (!string.IsNullOrEmpty(ns))
+					allOverloadsSb.AppendLine($"namespace {ns} {{");
+				allOverloadsSb.AppendLine($"partial class {classDecl.Identifier} {{");
 				foreach (var (paramList, invokeParams) in validCombos)
 				{
 					var paramTypes = string.Join(", ", paramList.Select(p => $"{p.Type} {p.Identifier}"));
 					var invokeArgs = string.Join(", ", invokeParams);
-					var sb = new StringBuilder();
-					if (!string.IsNullOrEmpty(ns))
-						sb.AppendLine($"namespace {ns} {{");
-					sb.AppendLine($"partial class {classDecl.Identifier} {{");
-					sb.AppendLine($"    public {method.ReturnType} {method.Identifier}({paramTypes}) => {method.Identifier}({invokeArgs});");
-					sb.AppendLine("}");
-					if (!string.IsNullOrEmpty(ns))
-						sb.AppendLine("}");
-					spc.AddSource(
-						$"{classDecl.Identifier}_{method.Identifier}_overload_{overloadIndex++}.g.cs",
-						sb.ToString());
+					allOverloadsSb.AppendLine($"    public {method.ReturnType} {method.Identifier}({paramTypes}) => {method.Identifier}({invokeArgs});");
 				}
+				allOverloadsSb.AppendLine("}");
+				if (!string.IsNullOrEmpty(ns))
+					allOverloadsSb.AppendLine("}");
+				spc.AddSource(
+					$"{classDecl.Identifier}_{method.Identifier}_overloads.g.cs",
+					allOverloadsSb.ToString());
 			}
 		);
 	}
