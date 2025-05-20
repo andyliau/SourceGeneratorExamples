@@ -77,7 +77,7 @@ public partial class MyClass
                 {
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_1.g.cs", expected0),
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_2.g.cs", expected1),
-                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_3.g.cs", expected2),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_3.g.cs", expected2),
                 }
             }
         };
@@ -121,6 +121,59 @@ public partial class MyClass
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quux_overload_1.g.cs", expected1),
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quux_overload_2.g.cs", expected2),
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quux_overload_3.g.cs", expected3),
+                }
+            }
+        };
+
+        await test.RunAsync();
+    }
+
+    [Test]
+    public async Task Handles_Method_With_Mixed_Optional_Types_Combinations()
+    {
+        var input = @"
+using SourceGenerators;
+
+public partial class MyClass
+{
+    [GenerateOverloads]
+    public void Quack(string a, string b = ""1"", int c = 2, int d = 3) { }
+}
+";
+
+        var expected1 = @"partial class MyClass {
+    public void Quack(string a) => Quack(a, ""1"", 2, 3);
+}
+";
+        var expected2 = @"partial class MyClass {
+    public void Quack(string a, string b) => Quack(a, b, 2, 3);
+}
+";
+        var expected3 = @"partial class MyClass {
+    public void Quack(string a, string b, int c) => Quack(a, b, c, 3);
+}
+";
+        var expected4 = @"partial class MyClass {
+    public void Quack(string a, int c, int d) => Quack(a, ""1"", c, d);
+}
+";
+        var expected5 = @"partial class MyClass {
+    public void Quack(string a, int c) => Quack(a, ""1"", c, 3);
+}
+";
+
+        var test = new CSharpSourceGeneratorTest<SourceGenerators.MethodOverloadGenerator, Verifier>
+        {
+            TestState =
+            {
+                Sources = { AttributeSource, input },
+                GeneratedSources =
+                {
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quack_overload_1.g.cs", expected1),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quack_overload_2.g.cs", expected2),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quack_overload_3.g.cs", expected3),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quack_overload_4.g.cs", expected4),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Quack_overload_5.g.cs", expected5),
                 }
             }
         };
