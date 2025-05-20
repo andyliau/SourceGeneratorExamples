@@ -1,9 +1,10 @@
+#pragma warning disable CS0618 // XUnitVerifier is obsolete in Roslyn SDK, but required for source generator tests
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
+using Verifier = Microsoft.CodeAnalysis.Testing.Verifiers.XUnitVerifier;
 
 public class MethodOverloadGeneratorTests
 {
@@ -45,7 +46,7 @@ public partial class MyClass
 
         var expectedSet = new HashSet<string> { expected1, expected2, expected3 };
 
-        var test = new CSharpSourceGeneratorTest<SourceGenerators.MethodOverloadGenerator, XUnitVerifier>
+        var test = new CSharpSourceGeneratorTest<SourceGenerators.MethodOverloadGenerator, Verifier>
         {
             TestState =
             {
@@ -62,3 +63,4 @@ public partial class MyClass
         await test.RunAsync();
     }
 }
+#pragma warning restore CS0618
