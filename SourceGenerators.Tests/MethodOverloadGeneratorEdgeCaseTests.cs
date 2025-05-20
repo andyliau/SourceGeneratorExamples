@@ -55,6 +55,10 @@ public partial class MyClass
 }
 ";
 
+        var expected0 = @"partial class MyClass {
+    public void Baz() => Baz(null, 42);
+}
+";
         var expected1 = @"partial class MyClass {
     public void Baz(string? s) => Baz(s, 42);
 }
@@ -71,8 +75,9 @@ public partial class MyClass
                 Sources = { AttributeSource, input },
                 GeneratedSources =
                 {
-                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_1.g.cs", expected1),
-                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_2.g.cs", expected2),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_1.g.cs", expected0),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_2.g.cs", expected1),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Baz_overload_3.g.cs", expected2),
                 }
             }
         };

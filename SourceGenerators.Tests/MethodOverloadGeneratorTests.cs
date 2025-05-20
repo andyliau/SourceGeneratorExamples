@@ -31,13 +31,19 @@ public partial class MyClass
 ";
 
         var expected1 = @"partial class MyClass {
-    public void Foo(int x, string y) => Foo(x, y, false);
+    public void Foo(int x) => Foo(x, ""x"", false);
 }
 ";
         var expected2 = @"partial class MyClass {
+    public void Foo(int x, string y) => Foo(x, y, false);
+}
+";
+        var expected3 = @"partial class MyClass {
     public void Foo(int x, bool z) => Foo(x, ""x"", z);
 }
 ";
+
+        var expectedSet = new HashSet<string> { expected1, expected2, expected3 };
 
         var test = new CSharpSourceGeneratorTest<SourceGenerators.MethodOverloadGenerator, XUnitVerifier>
         {
@@ -48,6 +54,7 @@ public partial class MyClass
                 {
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Foo_overload_1.g.cs", expected1),
                     (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Foo_overload_2.g.cs", expected2),
+                    (typeof(SourceGenerators.MethodOverloadGenerator), "MyClass_Foo_overload_3.g.cs", expected3),
                 }
             }
         };

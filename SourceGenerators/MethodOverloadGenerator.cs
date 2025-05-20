@@ -30,10 +30,11 @@ public class MethodOverloadGenerator : IIncrementalGenerator
                 var optionalParams = parameters.Skip(requiredCount).ToList();
                 if (optionalParams.Count == 0) return;
 
-                // Generate all valid combinations of optional parameters (except empty set)
+                // Generate all valid combinations of optional parameters (including empty set)
                 int combinations = (1 << optionalParams.Count) - 1;
                 int overloadIndex = 1;
-                for (int mask = 1; mask <= combinations; mask++)
+                var generatedSignatures = new HashSet<string>();
+                for (int mask = 0; mask <= combinations; mask++)
                 {
                     var paramList = parameters.Take(requiredCount).ToList();
                     var invokeParams = new List<string>();
@@ -59,6 +60,11 @@ public class MethodOverloadGenerator : IIncrementalGenerator
 
                     // Only generate overloads with fewer parameters than the original
                     if (paramList.Count == parameters.Count)
+                        continue;
+
+                    // Uniqueness: use parameter types and names for signature
+                    var paramSignature = string.Join(",", paramList.Select(p => p.Type + " " + p.Identifier));
+                    if (!generatedSignatures.Add(paramSignature))
                         continue;
 
                     var paramTypes = string.Join(", ", paramList.Select(p => $"{p.Type} {p.Identifier}"));
