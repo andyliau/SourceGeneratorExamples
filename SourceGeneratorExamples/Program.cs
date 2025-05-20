@@ -8,3 +8,5 @@ overloadExample.Print("Hello, World!");
 overloadExample.Print("Hello, World!", true);
 
 overloadExample.Print("Hello, World!", 3);
+
+overloadExample.Complex("required", 3);
