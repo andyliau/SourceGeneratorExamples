@@ -39,7 +39,29 @@ public partial class MyClass
             }
         };
 
-        await test.RunAsync();
+        try
+        {
+            await test.RunAsync();
+        }
+        catch (AssertionException ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.Data != null)
+            {
+                foreach (var key in ex.Data.Keys)
+                {
+                    TestContext.WriteLine($"{key}: {ex.Data[key]}");
+                }
+            }
+            throw;
+        }
+        catch (Exception ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.InnerException != null)
+                TestContext.WriteLine("Inner: " + ex.InnerException.Message);
+            throw;
+        }
     }
 
     [Test]
@@ -82,7 +104,29 @@ public partial class MyClass
             }
         };
 
-        await test.RunAsync();
+        try
+        {
+            await test.RunAsync();
+        }
+        catch (AssertionException ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.Data != null)
+            {
+                foreach (var key in ex.Data.Keys)
+                {
+                    TestContext.WriteLine($"{key}: {ex.Data[key]}");
+                }
+            }
+            throw;
+        }
+        catch (Exception ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.InnerException != null)
+                TestContext.WriteLine("Inner: " + ex.InnerException.Message);
+            throw;
+        }
     }
 
     [Test]
@@ -125,7 +169,29 @@ public partial class MyClass
             }
         };
 
-        await test.RunAsync();
+        try
+        {
+            await test.RunAsync();
+        }
+        catch (AssertionException ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.Data != null)
+            {
+                foreach (var key in ex.Data.Keys)
+                {
+                    TestContext.WriteLine($"{key}: {ex.Data[key]}");
+                }
+            }
+            throw;
+        }
+        catch (Exception ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.InnerException != null)
+                TestContext.WriteLine("Inner: " + ex.InnerException.Message);
+            throw;
+        }
     }
 
     [Test]
@@ -178,6 +244,28 @@ public partial class MyClass
             }
         };
 
-        await test.RunAsync();
+        try
+        {
+            await test.RunAsync();
+        }
+        catch (AssertionException ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.Data != null)
+            {
+                foreach (var key in ex.Data.Keys)
+                {
+                    TestContext.WriteLine($"{key}: {ex.Data[key]}");
+                }
+            }
+            throw;
+        }
+        catch (Exception ex)
+        {
+            TestContext.WriteLine("Test failed: " + ex.Message);
+            if (ex.InnerException != null)
+                TestContext.WriteLine("Inner: " + ex.InnerException.Message);
+            throw;
+        }
     }
 }
