@@ -1,13 +1,11 @@
 using NUnit.Framework;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
 using Verifier = Microsoft.CodeAnalysis.Testing.Verifiers.NUnitVerifier;
 
 public class MethodOverloadGeneratorEdgeCaseTests
 {
-	const string AttributeSource = """using System;
+	const string AttributeSource = """
+using System;	
 namespace SourceGenerators
 {
     [AttributeUsage(AttributeTargets.Method)]
