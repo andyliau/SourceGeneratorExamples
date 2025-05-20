@@ -4,3 +4,7 @@ Console.WriteLine("Hello, World!");
 
 var overloadExample = new SourceGeneratorExamples.MethodOverloadExample();
 overloadExample.Print("Hello, World!");
+
+overloadExample.Print("Hello, World!", true);
+
+overloadExample.Print("Hello, World!", 3);

@@ -60,7 +60,7 @@ public partial class MyClass
 }
 ";
         var expected2 = @"partial class MyClass {
-    public void Baz() => Baz(null, 42);
+    public void Baz(int n) => Baz(null, n);
 }
 ";
 

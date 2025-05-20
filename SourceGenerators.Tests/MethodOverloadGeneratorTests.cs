@@ -26,17 +26,16 @@ using SourceGenerators;
 public partial class MyClass
 {
     [GenerateOverloads]
-    public void Foo(int x, int y = 1, int z = 2) { }
+    public void Foo(int x, string y = ""x"", bool z = false) { }
 }
 ";
 
-        // The expected output may need to be split into separate files for each overload
         var expected1 = @"partial class MyClass {
-    public void Foo(int x, int y) => Foo(x, y, 2);
+    public void Foo(int x, string y) => Foo(x, y, false);
 }
 ";
         var expected2 = @"partial class MyClass {
-    public void Foo(int x) => Foo(x, 1, 2);
+    public void Foo(int x, bool z) => Foo(x, ""x"", z);
 }
 ";
 
