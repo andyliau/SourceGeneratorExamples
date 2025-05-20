@@ -216,15 +216,15 @@ public partial class MyClass
 }
 ";
 		var expected3 = @"partial class MyClass {
-    public void Quack(string a, string b, int c) => Quack(a, b, c, 3);
+    public void Quack(string a, int c) => Quack(a, ""1"", c, 3);
 }
 ";
 		var expected4 = @"partial class MyClass {
-    public void Quack(string a, int c, int d) => Quack(a, ""1"", c, d);
+    public void Quack(string a, string b, int c) => Quack(a, b, c, 3);
 }
 ";
 		var expected5 = @"partial class MyClass {
-    public void Quack(string a, int c) => Quack(a, ""1"", c, 3);
+    public void Quack(string a, int c, int d) => Quack(a, ""1"", c, d);
 }
 ";
 
